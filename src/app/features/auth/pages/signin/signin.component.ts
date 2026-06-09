@@ -18,8 +18,10 @@ import { AuthService } from '../../../../core/services/auth.service';
 export class SigninComponent implements OnInit {
   signinForm!: FormGroup;
   isLoading = false;
-  errorMessage = '';
-  showPassword = false;
+
+  errorMsg = '';
+
+  showPwd = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,23 +43,23 @@ export class SigninComponent implements OnInit {
     }
 
     this.isLoading = true;
+    this.errorMsg = '';
+
     const payload = this.signinForm.value;
-    this.errorMessage = '';
 
     this.authService.signIn(payload)
       .subscribe({
-        next: (response) => {
-          localStorage.setItem(
-            'token',
-            response.token
-          );
+        next: (response: any) => {
+          localStorage.setItem('token', response.token);
           this.router.navigate(['/dashboard']);
         },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Invalid email or password.';
-        this.isLoading = false;
-      }
-    });
+        error: (err) => {
+          this.errorMsg =
+            err.error?.message ||
+            'Invalid email or password.';
+          this.isLoading = false;
+        }
+      });
   }
 
   onGoogleSignIn(): void {

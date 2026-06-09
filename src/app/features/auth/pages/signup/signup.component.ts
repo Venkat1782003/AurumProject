@@ -3,19 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service'; 
-import { FindLabelPipe } from '../../../../shared/pipes/find-label.pipe';
+//import { FindLabelPipe } from '../../../../shared/pipes/find-label.pipe';
 import {
   Role
 } from '../../../../core/models/category.enums';
-import {
+/*import {
   DropdownOption,
   SubCategory1Selection
-} from '../../../../core/models/category.interfaces';
+} from '../../../../core/models/category.interfaces';*/
 import {
   ROLE_LABELS,
-  SUB1_BY_ROLE,
-  SUB2_BY_SUB1,
-  SUB3_OPTIONS
+ //SUB1_BY_ROLE,
+ // SUB2_BY_SUB1,
+  //SUB3_OPTIONS
 } from '../../../../core/constants/category.constants';
 import {
   COUNTRY_CODES
@@ -37,7 +37,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    FindLabelPipe
+    //FindLabelPipe
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
@@ -60,12 +60,12 @@ export class SignupComponent implements OnInit {
   countryDropdownOpen = false;
   units = ['Thousand', 'Lakh', 'Crore'];
  
-  sub1Options: DropdownOption[] = [];
-  sub3Options: DropdownOption[] = SUB3_OPTIONS;
+  //sub1Options: DropdownOption[] = [];
+ // sub3Options: DropdownOption[] = SUB3_OPTIONS;
 
-  selectedSub1: string[] = [];
+  //selectedSub1: string[] = [];
 
-  categoryHierarchy: SubCategory1Selection[] = [];
+  //categoryHierarchy: SubCategory1Selection[] = [];
  
   get role(): string { return this.form?.get('role')?.value || ''; }
   get isProfessional(): boolean { return this.role !== 'CUSTOMER' && this.role !== ''; }
@@ -87,43 +87,42 @@ export class SignupComponent implements OnInit {
       confirmPassword:   ['', Validators.required],
       role:              ['', Validators.required],
       yearsOfExperience: [null],
-      categoryHierarchy: [[]],
+      //categoryHierarchy: [[]],
       projectSize:       [null],
       projectSizeUnit:   ['Crore'],
     }, { validators: passwordMatchValidator });
  
-    this.form.get('role')?.valueChanges.subscribe(val => {
+    /*this.form.get('role')?.valueChanges.subscribe(val => {
       this.onRoleChange(val);
-    });
+    });*/
   }
  
-  onRoleChange(role: string): void {
-    this.sub1Options = SUB1_BY_ROLE[role] || [];
-    this.selectedSub1 = [];
-    this.categoryHierarchy = [];
+  /*onRoleChange(role: string): void {
+    //this.sub1Options = SUB1_BY_ROLE[role] || [];
+    //this.selectedSub1 = [];
+   // this.categoryHierarchy = [];
 
     this.form.patchValue({
       categoryHierarchy: []
     });
     this.updateProfessionalValidators(role);
-  }
+  }*/
  
   updateProfessionalValidators(role: string): void {
     const yoe = this.form.get('yearsOfExperience');
-    const hierarchy =
-  this.form.get('categoryHierarchy');
+    //const hierarchy = this.form.get('categoryHierarchy');
     const ps  = this.form.get('projectSize');
  
     if (role && role !== 'CUSTOMER') {
       yoe?.setValidators([Validators.required, Validators.min(0), Validators.max(999)]);
-      hierarchy?.setValidators(Validators.required);
+      //hierarchy?.setValidators(Validators.required);
       ps?.setValidators([Validators.required, Validators.min(0)]);
     } else {
-      [yoe, hierarchy, ps].forEach(c => c?.clearValidators());
+      [yoe, ps].forEach(c => c?.clearValidators());
     }
-    [yoe, hierarchy, ps].forEach(c => c?.updateValueAndValidity());
+    [yoe, ps].forEach(c => c?.updateValueAndValidity());
   }
- toggleSub1(sub1: string): void {
+ /*toggleSub1(sub1: string): void {
 
   const idx = this.selectedSub1.indexOf(sub1);
 
@@ -269,7 +268,7 @@ private syncHierarchy(): void {
       this.categoryHierarchy
   });
 
-}
+}*/
  
   // ── Dropdown toggle ────────────────────────────────────────────────────────
  
@@ -282,7 +281,7 @@ private syncHierarchy(): void {
   toggleCountryDropdown(event: Event): void {
     event.stopPropagation();
     this.countryDropdownOpen = !this.countryDropdownOpen;
-    this.openDropdown = null;
+    //this.openDropdown = null;
   }
  
   selectCountry(c: typeof COUNTRY_CODES[0]): void {
@@ -292,7 +291,7 @@ private syncHierarchy(): void {
  
   @HostListener('document:click')
   closeAll(): void {
-    this.openDropdown = null;
+    //this.openDropdown = null;
     this.countryDropdownOpen = false;
   }
  
@@ -317,7 +316,7 @@ private syncHierarchy(): void {
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.router.navigate(['auth/signin']);
+          this.router.navigate(['/auth/signin']);
         },
         error: (error) => {
           this.isLoading = false;
@@ -327,9 +326,5 @@ private syncHierarchy(): void {
         }
       });
   }
- 
-  onGoogle(): void {
-    // this.authService.signInWithGoogle();
-    console.log('Google sign-in');
-  }
+
 }
