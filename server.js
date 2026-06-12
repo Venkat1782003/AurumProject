@@ -5,6 +5,9 @@ const app = express();
 const distPath = path.join(__dirname, 'dist/aec-platform/browser');
 
 app.use(express.static(distPath));
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
