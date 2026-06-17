@@ -25,9 +25,21 @@ export const routes: Routes = [
       .then(m => m.GoogleSuccessComponent)
  },
   {
-  path: 'dashboard',
+  path: 'auth/dashboard',
   loadComponent: () =>
     import('./features/dashboard/pages/dashboard/dashboard.component')
       .then(m => m.DashboardComponent)
-}
+},
+  {
+    path: 'auth/profile',
+    loadComponent: () =>
+      import('./features/profile/profile.component')
+        .then(m => m.ProfileComponent)
+  },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./features/home/home.component')
+        .then(m => m.HomeComponent)
+  }
 ];

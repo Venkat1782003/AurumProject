@@ -1,0 +1,56 @@
+<div class="home-page">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">A</span>
+      <div class="brand-text">
+        <span class="brand-name">AEC</span>
+        <span class="brand-sub">PLATFORM</span>
+      </div>
+    </div>
+    <button class="profile-btn" (click)="goToProfile()">Edit Profile</button>
+  </header>
+
+  <main class="home-content">
+    <div class="welcome-card">
+      <span class="badge">AEC PLATFORM</span>
+      <h1>Good evening,<br><span class="highlight">{{ userName }}</span></h1>
+      <p>Your construction ecosystem dashboard is being built.</p>
+      <p class="muted">Check back soon for projects, connections, and more.</p>
+
+      <hr>
+
+      <p class="modules-line">
+        Dashboard modules — Projects · Directory · Tenders · Analytics — coming soon.
+      </p>
+    </div>
+
+    <section class="recent-section">
+      <h2>Recently Viewed</h2>
+      <div *ngIf="recentItems.length === 0" class="empty-state">
+        No recent activity yet. Start exploring projects to see them here.
+      </div>
+      <div class="recent-list" *ngIf="recentItems.length > 0">
+        <div class="recent-item" *ngFor="let item of recentItems">
+          <div class="recent-icon"></div>
+          <div class="recent-details">
+            <span class="recent-name">{{ item.name }}</span>
+            <span class="recent-type">{{ item.type }}</span>
+          </div>
+          <span class="recent-time">{{ item.viewedAt }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="modules-grid">
+      <div class="module-card" *ngFor="let module of modules">
+        <span class="module-name">{{ module.name }}</span>
+        <span class="coming-soon">COMING SOON</span>
+        <span class="lock-icon" *ngIf="module.locked">🔒</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    AEC PLATFORM · CONSTRUCTION ECOSYSTEM · DASHBOARD
+  </footer>
+</div>

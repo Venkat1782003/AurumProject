@@ -1,0 +1,48 @@
+<div class="profile-page">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">A</span>
+      <div class="brand-text">
+        <span class="brand-name">AEC</span>
+        <span class="brand-sub">PLATFORM</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-content">
+    <div class="profile-card">
+      <span class="badge">AEC PLATFORM</span>
+      <h1>Complete your <span class="highlight">profile</span></h1>
+      <p class="subtitle">Tell us a bit about yourself to personalize your dashboard.</p>
+
+      <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
+        <div class="form-row">
+          <label for="name">Full Name</label>
+          <input id="name" type="text" [(ngModel)]="profile.name" name="name" placeholder="Jane Doe" required>
+        </div>
+
+        <div class="form-row">
+          <label for="company">Company</label>
+          <input id="company" type="text" [(ngModel)]="profile.company" name="company" placeholder="Your company name">
+        </div>
+
+        <div class="form-row">
+          <label for="role">Role</label>
+          <input id="role" type="text" [(ngModel)]="profile.role" name="role" placeholder="e.g. Site Engineer, Consultant">
+        </div>
+
+        <div class="form-row">
+          <label for="phone">Phone Number</label>
+          <input id="phone" type="tel" [(ngModel)]="profile.phone" name="phone" placeholder="+91 00000 00000">
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary-btn" [disabled]="saving || !profileForm.valid">
+            {{ saving ? 'Saving...' : 'Save & Continue' }}
+          </button>
+          <button type="button" class="link-btn" (click)="skipForNow()">Skip for now</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

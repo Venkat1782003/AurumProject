@@ -1,0 +1,157 @@
+.profile-page {
+  min-height: 100vh;
+  background: #eef1f5;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.topbar {
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1.5px solid #3b6ea5;
+  color: #3b6ea5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: #999;
+  letter-spacing: 2px;
+}
+
+.profile-content {
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px 80px;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 48px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+}
+
+.badge {
+  display: inline-block;
+  background: #e3eaf2;
+  color: #3b6ea5;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #1a1a1a;
+}
+
+.highlight {
+  color: #3b6ea5;
+  text-decoration: underline;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 32px;
+}
+
+.form-row {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+input {
+  padding: 12px 14px;
+  border: 1px solid #e0ddd8;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #3b6ea5;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.primary-btn {
+  background: #3b6ea5;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primary-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+}
