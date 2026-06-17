@@ -51,7 +51,7 @@ export class SigninComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           localStorage.setItem('token', response.token);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           this.errorMsg =
