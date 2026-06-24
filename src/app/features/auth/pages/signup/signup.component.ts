@@ -310,13 +310,20 @@ private syncHierarchy(): void {
     const { confirmPassword, ...payload } = this.form.value;
     payload.phoneNumber = `${this.selectedCountryCode.code}${payload.phoneNumber}`;
     console.log('Payload:', JSON.stringify(payload, null, 2));
- 
+
+    const signupDraft = {
+      role: payload.role,
+      fullName: payload.fullName,
+      email: payload.email
+    };
+    localStorage.setItem('signupDraft', JSON.stringify(signupDraft));
+
     // TODO: call this.authService.signUp(payload)
     this.authService.signUp(payload)
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.router.navigate(['/auth/signin']);
+          this.router.navigate(['/auth/profile']);
         },
         error: (error) => {
           this.isLoading = false;

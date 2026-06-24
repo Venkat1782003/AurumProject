@@ -10,30 +10,36 @@
   </header>
 
   <main class="profile-content">
-    <div class="profile-card">
-      <span class="badge">AEC PLATFORM</span>
-      <h1>Complete your <span class="highlight">profile</span></h1>
-      <p class="subtitle">Tell us a bit about yourself to personalize your dashboard.</p>
+    <section class="profile-panel">
+      <div class="panel-header">
+        <span class="badge">Professional Info</span>
+        <h1>Professional details</h1>
+        <p class="subtitle">Keep your contact details and company information current.</p>
+      </div>
 
       <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
-        <div class="form-row">
-          <label for="name">Full Name</label>
-          <input id="name" type="text" [(ngModel)]="profile.name" name="name" placeholder="Jane Doe" required>
+        <div class="form-row-group">
+          <div class="form-row">
+            <label for="name">Full Name</label>
+            <input id="name" type="text" [(ngModel)]="profile.name" name="name" placeholder="Jane Doe" required>
+          </div>
+
+          <div class="form-row">
+            <label for="company">Company</label>
+            <input id="company" type="text" [(ngModel)]="profile.company" name="company" placeholder="Your company name">
+          </div>
         </div>
 
-        <div class="form-row">
-          <label for="company">Company</label>
-          <input id="company" type="text" [(ngModel)]="profile.company" name="company" placeholder="Your company name">
-        </div>
+        <div class="form-row-group">
+          <div class="form-row">
+            <label for="role">Role</label>
+            <input id="role" type="text" [(ngModel)]="profile.role" name="role" [disabled]="true" placeholder="{{ roleLabel || 'Role' }}">
+          </div>
 
-        <div class="form-row">
-          <label for="role">Role</label>
-          <input id="role" type="text" [(ngModel)]="profile.role" name="role" placeholder="e.g. Site Engineer, Consultant">
-        </div>
-
-        <div class="form-row">
-          <label for="phone">Phone Number</label>
-          <input id="phone" type="tel" [(ngModel)]="profile.phone" name="phone" placeholder="+91 00000 00000">
+          <div class="form-row">
+            <label for="phone">Phone Number</label>
+            <input id="phone" type="tel" [(ngModel)]="profile.phone" name="phone" placeholder="+91 00000 00000">
+          </div>
         </div>
 
         <div class="actions">
@@ -43,6 +49,87 @@
           <button type="button" class="link-btn" (click)="skipForNow()">Skip for now</button>
         </div>
       </form>
-    </div>
+    </section>
+
+    <aside class="career-panel">
+      <div class="career-header">
+        <h2>Business model</h2>
+      </div>
+
+      <div class="role-hero" *ngIf="roleLabel">
+        <button type="button" class="role-pill" (click)="goBackToSub1()">{{ roleLabel }}</button>
+      </div>
+
+      <div class="sub-breadcrumb" *ngIf="activeSub1 && uiStage !== 'sub1'">
+        <button type="button" class="breadcrumb-link" (click)="goBackToSub1()">{{ roleLabel }}</button>
+        <span class="breadcrumb-separator">›</span>
+        <button type="button" class="breadcrumb-link active" (click)="goBackToSub2()">
+          {{ getSub1Label(activeSub1) }}
+        </button>
+        <ng-container *ngIf="activeSub2">
+          <span class="breadcrumb-separator">›</span>
+          <span class="breadcrumb-current">{{ getSub2Label(activeSub2) }}</span>
+        </ng-container>
+      </div>
+
+      <div class="sub1-block" *ngIf="uiStage === 'sub1'">
+        <div class="section-title-row">
+          <span class="section-title">Discipline</span>
+          <span class="section-note">Select a discipline to begin</span>
+        </div>
+
+        <div class="sub1-list">
+          <button
+            type="button"
+            class="sub1-button"
+            *ngFor="let option of availableSub1Options"
+            (click)="selectSub1(option.value)">
+            {{ option.label }}
+          </button>
+        </div>
+      </div>
+
+
+      <div class="sub2-block" *ngIf="uiStage === 'sub2' && activeSub1">
+        <div class="sub2-list">
+          <button
+            type="button"
+            class="sub2-button"
+            [class.active]="activeSub2 === option.value"
+            *ngFor="let option of allSub2Options"
+            (click)="selectSub2(option.value)">
+            {{ option.label }}
+          </button>
+        </div>
+      </div>
+
+      <div class="sub3-block" *ngIf="uiStage === 'sub3' && activeSub1 && activeSub2">
+        <div class="sub3-toolbar"></div>
+
+        <div class="sub3-grid">
+          <div class="sub3-card" *ngFor="let option of sub3Options" [class.selected]="isSub3Selected(option.value)">
+            <div class="sub3-card-top">
+              <div class="sub3-icon-frame">
+                <button type="button" class="sub3-icon" (click)="toggleSub3(option.value)" [attr.aria-label]="getProjectTypeLabel(option.value)" [title]="getProjectTypeLabel(option.value)">
+                  <span class="icon">{{ getSub3Icon(option.value) }}</span>
+                </button>
+                <div class="sub3-label">{{ getProjectTypeLabel(option.value) }}</div>
+                <label class="upload-label">
+                  <input type="file" accept="image/*" multiple (change)="handleFileInput($event, option.value)" />
+                  Upload
+                </label>
+              </div>
+            </div>
+
+            <div class="photo-thumbs">
+              <div class="thumb" *ngFor="let img of getPhotos(option.value); let i = index">
+                <img [src]="img" alt="photo {{i+1}}">
+                <button type="button" class="thumb-remove" (click)="removePhoto(option.value, i)">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
   </main>
 </div>

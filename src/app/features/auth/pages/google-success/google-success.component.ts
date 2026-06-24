@@ -22,7 +22,7 @@ export class GoogleSuccessComponent implements OnInit {
 
       localStorage.setItem('token', token);
 
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/auth/profile']);
 
     } else {
 

@@ -33,13 +33,13 @@ export const routes: Routes = [
   {
     path: 'auth/profile',
     loadComponent: () =>
-      import('./features/profile/profile.component')
+      import('./features/auth/pages/profile/Profile.component')
         .then(m => m.ProfileComponent)
   },
   {
     path: 'home',
     loadComponent: () =>
-      import('./features/home/home.component')
+      import('./features/auth/pages/home/home.component')
         .then(m => m.HomeComponent)
   }
 ];

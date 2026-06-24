@@ -7,7 +7,10 @@
         <span class="brand-sub">PLATFORM</span>
       </div>
     </div>
-    <button class="profile-btn" (click)="goToProfile()">Edit Profile</button>
+    <div class="top-actions">
+      <button class="profile-btn" (click)="goToProfile()">Edit Profile</button>
+      <button class="signout-btn" (click)="signOut()">Sign out</button>
+    </div>
   </header>
 
   <main class="home-content">
@@ -37,6 +40,23 @@
             <span class="recent-type">{{ item.type }}</span>
           </div>
           <span class="recent-time">{{ item.viewedAt }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="search-section">
+      <h2>Search</h2>
+      <div class="search-panel">
+        <div class="search-bar">
+          <input type="search" placeholder="Search projects, people or companies" [(ngModel)]="searchQuery" name="searchQuery" />
+          <button type="button" class="search-btn" (click)="goToSearch()">Search</button>
+        </div>
+
+        <div class="sub3-grid">
+          <button type="button" class="sub3-card" *ngFor="let opt of sub3Options" (click)="goToSearch(opt.value)">
+            <span class="sub3-icon">{{ getProjectTypeIcon(opt.value) }}</span>
+            <span class="sub3-label">{{ opt.label }}</span>
+          </button>
         </div>
       </div>
     </section>
