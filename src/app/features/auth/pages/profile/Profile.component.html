@@ -7,6 +7,7 @@
         <span class="brand-sub">PLATFORM</span>
       </div>
     </div>
+    <button class="nav-btn" (click)="skipForNow()">Home</button>
   </header>
 
   <main class="profile-content">
@@ -18,93 +19,108 @@
       </div>
 
       <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
+
+        <!-- Row 1: Full Name + Company -->
         <div class="form-row-group">
           <div class="form-row">
             <label for="name">Full Name</label>
             <input id="name" type="text" [(ngModel)]="profile.name" name="name" placeholder="Jane Doe" required>
           </div>
-
           <div class="form-row">
             <label for="company">Company</label>
             <input id="company" type="text" [(ngModel)]="profile.company" name="company" placeholder="Your company name">
           </div>
         </div>
 
+        <!-- Row 2: Role + Phone -->
         <div class="form-row-group">
           <div class="form-row">
             <label for="role">Role</label>
             <select id="role" [(ngModel)]="selectedRole" name="role" (change)="changeRole(selectedRole)">
-              <option *ngFor="let option of roleOptions" [ngValue]="option.value">
-                {{ option.label }}
-              </option>
+              <option value="" disabled>Select a role</option>
+              <option *ngFor="let option of roleOptions" [ngValue]="option.value">{{ option.label }}</option>
             </select>
           </div>
-
           <div class="form-row">
             <label for="phone">Phone Number</label>
             <input id="phone" type="tel" [(ngModel)]="profile.phone" name="phone" placeholder="+91 00000 00000">
           </div>
         </div>
 
-        <div class="sub1-block" *ngIf="uiStage === 'sub1'">
-          <div class="section-title-row">
-            <span class="section-title">Discipline</span>
-            <span class="section-note">Select a discipline to begin</span>
-          </div>
-
-          <div class="sub1-list">
+        <!-- Sub1: Discipline chips -->
+        <div class="tree-block" *ngIf="availableSub1Options.length > 0">
+          <label class="tree-label">Discipline</label>
+          <div class="chip-row">
             <button
               type="button"
-              class="sub1-button"
+              class="chip"
               *ngFor="let option of availableSub1Options"
+              [class.active]="activeSub1 === option.value"
+              [class.done]="selectedSub1.includes(option.value) && activeSub1 !== option.value"
               (click)="selectSub1(option.value)">
               {{ option.label }}
+              <span class="done-tick" *ngIf="selectedSub1.includes(option.value) && activeSub1 !== option.value">✓</span>
             </button>
           </div>
         </div>
 
-        <div class="sub2-block" *ngIf="uiStage === 'sub2' && activeSub1">
-          <div class="sub2-list">
+        <!-- Expanded block: only for the ACTIVE Sub1 -->
+        <div class="tree-block sub2-block" *ngIf="activeSub1 && getSub2Options(activeSub1).length > 0">
+          <label class="tree-label">
+            {{ getSub1Label(activeSub1) }}
+            <span class="tree-arrow">›</span>
+            Specialization
+          </label>
+          <div class="chip-row">
             <button
               type="button"
-              class="sub2-button"
+              class="chip"
+              *ngFor="let option of getSub2Options(activeSub1)"
               [class.active]="activeSub2 === option.value"
-              *ngFor="let option of allSub2Options"
-              (click)="selectSub2(option.value)">
+              [class.done]="isSub2Selected(activeSub1, option.value) && activeSub2 !== option.value"
+              (click)="selectSub2(activeSub1, option.value)">
               {{ option.label }}
+              <span class="done-tick" *ngIf="isSub2Selected(activeSub1, option.value) && activeSub2 !== option.value">✓</span>
             </button>
           </div>
-        </div>
 
-        <div class="sub3-block" *ngIf="uiStage === 'sub3' && activeSub1 && activeSub2">
-          <div class="sub3-toolbar">
-            <button type="button" class="secondary-btn" (click)="goBackToSub2()">Back to {{ getSub1Label(activeSub1) }}</button>
-          </div>
-
-          <div class="sub3-grid">
-            <div class="sub3-card" *ngFor="let option of sub3Options" [class.selected]="isSub3Selected(option.value)">
-              <div class="sub3-card-top">
-                <div class="sub3-icon-frame">
-                  <button type="button" class="sub3-icon" (click)="toggleSub3(option.value)" [attr.aria-label]="getProjectTypeLabel(option.value)" [title]="getProjectTypeLabel(option.value)">
-                    <span class="icon">{{ getSub3Icon(option.value) }}</span>
-                  </button>
-                  <div class="sub3-label">{{ getProjectTypeLabel(option.value) }}</div>
-                  <label class="upload-label">
-                    <input type="file" accept="image/*" multiple (change)="handleFileInput($event, option.value)" />
-                    Show your work
-                  </label>
-                </div>
+          <!-- Sub3 grid: only for the ACTIVE Sub2 within the active Sub1 -->
+          <div class="sub3-section" *ngIf="activeSub2">
+            <label class="tree-label sub3-label">
+              {{ getSub1Label(activeSub1) }} › {{ getSub2Label(activeSub2) }}
+              <span class="tree-arrow">›</span>
+              Project Types
+            </label>
+            <div class="sub3-grid">
+              <div
+                class="sub3-card"
+                *ngFor="let pt of sub3Options"
+                [class.selected]="isSub3Selected(activeSub1, activeSub2, pt.value)"
+                (click)="toggleSub3(activeSub1, activeSub2, pt.value)">
+                <span class="sub3-icon">{{ getSub3Icon(pt.value) }}</span>
+                <span class="sub3-label-text">{{ pt.label }}</span>
+                <span class="check" *ngIf="isSub3Selected(activeSub1, activeSub2, pt.value)">✓</span>
               </div>
+            </div>
 
+            <!-- Photo upload per selected Sub3 -->
+            <div class="photo-upload-row" *ngFor="let pt of getSelectedSub3s(activeSub1, activeSub2)">
+              <span class="photo-upload-label">{{ getSub3Icon(pt) }} {{ getProjectTypeLabel(pt) }} — Show your work</span>
+              <label class="upload-label">
+                <input type="file" accept="image/*" multiple (change)="handleFileInput($event, activeSub1, activeSub2, pt)" hidden>
+                + Add Photos
+              </label>
               <div class="photo-thumbs">
-                <div class="thumb" *ngFor="let img of getPhotos(option.value); let i = index">
-                  <img [src]="img" alt="photo {{i+1}}">
-                  <button type="button" class="thumb-remove" (click)="removePhoto(option.value, i)">×</button>
+                <div class="thumb" *ngFor="let img of getPhotos(activeSub1, activeSub2, pt); let i = index">
+                  <img [src]="img" alt="photo">
+                  <button type="button" class="thumb-remove" (click)="removePhoto(activeSub1, activeSub2, pt, i)">×</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="error-banner" *ngIf="error">{{ error }}</div>
 
         <div class="actions">
           <button type="submit" class="primary-btn" [disabled]="saving || !profileForm.valid">
@@ -112,6 +128,7 @@
           </button>
           <button type="button" class="link-btn" (click)="skipForNow()">Skip for now</button>
         </div>
+
       </form>
     </section>
   </main>

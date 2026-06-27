@@ -507,3 +507,235 @@ input:disabled {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── NEW: tree selection styles ─────────────────────────────────────────── */
+
+.topbar {
+  justify-content: space-between;
+}
+
+.nav-btn {
+  background: #fff;
+  border: 1px solid #e0ddd8;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  color: #444;
+}
+
+.nav-btn:hover {
+  border-color: #3b6ea5;
+  color: #3b6ea5;
+}
+
+select {
+  padding: 14px 16px;
+  border: 1px solid #e0ddd8;
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  color: #1a1a1a;
+  appearance: auto;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+select:focus {
+  border-color: #3b6ea5;
+  box-shadow: 0 0 0 3px rgba(59, 110, 165, 0.08);
+}
+
+.tree-block {
+  border-top: 1px solid #e9eef3;
+  padding-top: 20px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sub2-block {
+  padding-left: 12px;
+  border-left: 3px solid #e3eaf2;
+}
+
+.tree-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #3b6ea5;
+  letter-spacing: 0.3px;
+}
+
+.tree-arrow {
+  color: #aaa;
+  font-weight: 400;
+  margin: 0 4px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  background: #f4f6f9;
+  border: 1.5px solid #d6dfe8;
+  color: #333;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chip:hover {
+  border-color: #3b6ea5;
+  color: #3b6ea5;
+}
+
+.chip.selected {
+  background: #e3eaf2;
+  border-color: #3b6ea5;
+  color: #3b6ea5;
+}
+
+.chip.active {
+  background: #3b6ea5;
+  border-color: #3b6ea5;
+  color: #fff;
+}
+
+.sub3-section {
+  border-top: 1px dashed #dde3ea;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sub3-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #3b6ea5;
+}
+
+.sub3-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.sub3-card {
+  background: #f7f9fc;
+  border: 1.5px solid #d6dfe8;
+  border-radius: 12px;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.sub3-card:hover {
+  border-color: #3b6ea5;
+  transform: translateY(-2px);
+}
+
+.sub3-card.selected {
+  background: #3b6ea5;
+  border-color: #3b6ea5;
+  color: #fff;
+}
+
+.sub3-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.sub3-label-text {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.check {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.photo-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: #f4f6f9;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.photo-upload-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+  flex: 1;
+}
+
+.badge {
+  display: inline-block;
+  background: #e3eaf2;
+  color: #3b6ea5;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.error-banner {
+  background: #fdecea;
+  color: #c0392b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .sub3-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── done (selected but not active) chip state ── */
+.chip.done {
+  background: #f0f0f0;
+  border-color: #c0c8d4;
+  color: #888;
+  opacity: 0.75;
+}
+
+.chip.done:hover {
+  opacity: 1;
+  border-color: #3b6ea5;
+  color: #3b6ea5;
+}
+
+.done-tick {
+  margin-left: 6px;
+  font-size: 11px;
+  color: #3b6ea5;
+  font-weight: 700;
+}
+
+.chip.done .done-tick {
+  color: #888;
+}
