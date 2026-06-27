@@ -80,19 +80,6 @@
 
       <!-- Form -->
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
-
-        <!-- ── Basic Info ──────────────────────────────────────────────────── -->
-        <div class="section-label">
-          <div class="section-icon">
-            <svg viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="6.5" r="3.5" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <span class="section-title">Basic Info</span>
-        </div>
-
         <!-- Full Name -->
         <div class="field">
           <label>Full Name</label>
@@ -163,20 +150,6 @@
           <span class="hint-err" *ngIf="err('phoneNumber','required')">Phone is required</span>
           <span class="hint-err" *ngIf="err('phoneNumber','pattern')">Enter 7–15 digits only</span>
         </div>
-
-        <!-- ── Security ───────────────────────────────────────────────────── -->
-        <div class="section-label">
-          <div class="section-icon">
-            <svg viewBox="0 0 20 20" fill="none">
-              <rect x="4" y="8.5" width="12" height="9" rx="2"
-                stroke="currentColor" stroke-width="1.5"/>
-              <path d="M7 8.5V6.5a3 3 0 016 0v2"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <span class="section-title">Security</span>
-        </div>
-
         <div class="field-row">
           <!-- Password -->
           <div class="field">
@@ -242,20 +215,8 @@
             </span>
           </div>
         </div>
-
-        <!-- ── Role ───────────────────────────────────────────────────────── -->
-        <div class="section-label">
-          <div class="section-icon">
-            <svg viewBox="0 0 20 20" fill="none">
-              <rect x="2" y="3"   width="16" height="4.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
-              <rect x="2" y="9.5" width="11" height="4"   rx="1.5" stroke="currentColor" stroke-width="1.5"/>
-              <rect x="2" y="15.5" width="7" height="2.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-          </div>
-          <span class="section-title">Your Role</span>
-        </div>
-
         <div class="field">
+          <label>Role</label>
           <div class="role-grid">
 
             <div class="role-card" [class.selected]="role === 'CUSTOMER'"

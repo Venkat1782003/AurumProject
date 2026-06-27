@@ -52,13 +52,6 @@ export const routes: Routes = [
   },
 
   {
-    path: 'landing',
-    loadComponent: () =>
-      import('./features/landing/landing.component')
-        .then(m => m.LandingComponent)
-  },
-
-  {
     path: '**',
     redirectTo: ''
   }
