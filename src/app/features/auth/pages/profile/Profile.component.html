@@ -11,29 +11,30 @@
   </header>
 
   <main class="profile-content">
-    <section class="profile-panel">
-      <div class="panel-header">
-        <span class="badge">Professional Info</span>
-        <h1>Professional details</h1>
-        <p class="subtitle">Keep your contact details and company information current.</p>
-      </div>
+    <form (ngSubmit)="saveProfile()" #profileForm="ngForm" class="split-layout">
 
-      <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
+      <!-- ── LEFT: Professional Details (sticky) ─────────────────────────── -->
+      <aside class="left-panel">
+        <div class="panel-header">
+          <span class="badge">Professional Info</span>
+          <h1>Professional details</h1>
+          <p class="subtitle">Keep your contact details and company information current.</p>
+        </div>
 
-        <!-- Row 1: Full Name + Company -->
-        <div class="form-row-group">
+        <div class="form-fields">
+          <!-- Full Name -->
           <div class="form-row">
             <label for="name">Full Name</label>
             <input id="name" type="text" [(ngModel)]="profile.name" name="name" placeholder="Jane Doe" required>
           </div>
+
+          <!-- Company -->
           <div class="form-row">
             <label for="company">Company</label>
             <input id="company" type="text" [(ngModel)]="profile.company" name="company" placeholder="Your company name">
           </div>
-        </div>
 
-        <!-- Row 2: Role + Phone -->
-        <div class="form-row-group">
+          <!-- Role -->
           <div class="form-row">
             <label for="role">Role</label>
             <select id="role" [(ngModel)]="selectedRole" name="role" (change)="changeRole(selectedRole)">
@@ -41,16 +42,47 @@
               <option *ngFor="let option of roleOptions" [ngValue]="option.value">{{ option.label }}</option>
             </select>
           </div>
+
+          <!-- Phone with country code -->
           <div class="form-row">
             <label for="phone">Phone Number</label>
-            <input id="phone" type="tel" [(ngModel)]="profile.phone" name="phone" placeholder="+91 00000 00000">
+            <div class="phone-input-group">
+              <select id="countryCode" [(ngModel)]="selectedCountryCode" name="countryCode" class="country-code-select">
+                <option *ngFor="let country of countryOptions" [ngValue]="country.code">
+                  {{ country.flag }} {{ country.code }}
+                </option>
+              </select>
+              <input id="phone" type="tel" [(ngModel)]="profile.phone" name="phone" placeholder="00000 00000" class="phone-number-input">
+            </div>
+          </div>
+
+          <!-- Years of Experience -->
+          <div class="form-row">
+            <label for="years">Years of Experience</label>
+            <input id="years" type="number" [(ngModel)]="profile.yearsOfExperience" name="yearsOfExperience" placeholder="e.g. 8" min="0" max="60">
           </div>
         </div>
 
-        <!-- Sub1: Discipline chips -->
-        <div class="tree-block" *ngIf="availableSub1Options.length > 0">
-          <label class="tree-label">Discipline</label>
-          <div class="chip-row">
+        <div class="error-banner" *ngIf="error">{{ error }}</div>
+
+        <div class="actions">
+          <button type="submit" class="primary-btn" [disabled]="saving || !profileForm.valid">
+            {{ saving ? 'Saving...' : 'Save & Continue' }}
+          </button>
+          <button type="button" class="link-btn" (click)="skipForNow()">Skip for now</button>
+        </div>
+      </aside>
+
+      <!-- ── RIGHT: Discipline + Specialization (scrollable) ──────────────── -->
+      <section class="right-panel">
+
+        <!-- TOP: Discipline chips -->
+        <div class="right-top" *ngIf="availableSub1Options.length > 0; else noDiscipline">
+          <div class="section-heading">
+            <span class="tree-label">Discipline</span>
+            <p class="section-hint">Select your area(s) of practice</p>
+          </div>
+          <div class="sub2-grid">
             <button
               type="button"
               class="chip"
@@ -64,33 +96,48 @@
           </div>
         </div>
 
-        <!-- Expanded block: only for the ACTIVE Sub1 -->
-        <div class="tree-block sub2-block" *ngIf="activeSub1 && getSub2Options(activeSub1).length > 0">
-          <label class="tree-label">
-            {{ getSub1Label(activeSub1) }}
-            <span class="tree-arrow">›</span>
-            Specialization
-          </label>
-          <div class="chip-row">
-            <button
-              type="button"
-              class="chip"
-              *ngFor="let option of getSub2Options(activeSub1)"
-              [class.active]="activeSub2 === option.value"
-              [class.done]="isSub2Selected(activeSub1, option.value) && activeSub2 !== option.value"
-              (click)="selectSub2(activeSub1, option.value)">
-              {{ option.label }}
-              <span class="done-tick" *ngIf="isSub2Selected(activeSub1, option.value) && activeSub2 !== option.value">✓</span>
-            </button>
+        <ng-template #noDiscipline>
+          <div class="right-top empty-state">
+            <span class="empty-icon">🏗️</span>
+            <p>Select a <strong>Role</strong> on the left to see discipline options.</p>
+          </div>
+        </ng-template>
+
+        <!-- BOTTOM: Sub2 + Sub3 -->
+        <div class="right-bottom" *ngIf="activeSub1 && getSub2Options(activeSub1).length > 0">
+
+          <!-- Sub2 chips in grid -->
+          <div class="sub2-section">
+            <div class="section-heading">
+              <span class="tree-label">
+                {{ getSub1Label(activeSub1) }}
+                <span class="tree-arrow">›</span>
+                Specialization
+              </span>
+            </div>
+            <div class="sub2-grid">
+              <button
+                type="button"
+                class="chip"
+                *ngFor="let option of getSub2Options(activeSub1)"
+                [class.active]="activeSub2 === option.value"
+                [class.done]="isSub2Selected(activeSub1, option.value) && activeSub2 !== option.value"
+                (click)="selectSub2(activeSub1, option.value)">
+                {{ option.label }}
+                <span class="done-tick" *ngIf="isSub2Selected(activeSub1, option.value) && activeSub2 !== option.value">✓</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Sub3 grid: only for the ACTIVE Sub2 within the active Sub1 -->
+          <!-- Sub3 grid -->
           <div class="sub3-section" *ngIf="activeSub2">
-            <label class="tree-label sub3-label">
-              {{ getSub1Label(activeSub1) }} › {{ getSub2Label(activeSub2) }}
-              <span class="tree-arrow">›</span>
-              Project Types
-            </label>
+            <div class="section-heading">
+              <span class="tree-label sub3-label">
+                {{ getSub1Label(activeSub1) }} › {{ getSub2Label(activeSub2) }}
+                <span class="tree-arrow">›</span>
+                Project Types
+              </span>
+            </div>
             <div class="sub3-grid">
               <div
                 class="sub3-card"
@@ -118,18 +165,11 @@
               </div>
             </div>
           </div>
+
         </div>
 
-        <div class="error-banner" *ngIf="error">{{ error }}</div>
+      </section>
 
-        <div class="actions">
-          <button type="submit" class="primary-btn" [disabled]="saving || !profileForm.valid">
-            {{ saving ? 'Saving...' : 'Save & Continue' }}
-          </button>
-          <button type="button" class="link-btn" (click)="skipForNow()">Skip for now</button>
-        </div>
-
-      </form>
-    </section>
+    </form>
   </main>
 </div>

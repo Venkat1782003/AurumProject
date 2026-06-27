@@ -8,6 +8,7 @@ import {
   ROLE_LABELS, SUB1_BY_ROLE, SUB2_BY_SUB1, SUB3_OPTIONS,
   PROJECT_TYPE_LABELS, ROLE_OPTIONS
 } from '../../../../core/constants/category.constants';
+import { COUNTRY_CODES } from '../../../../shared/constants/country.constants';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,19 @@ import {
   styleUrl: './Profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
-  profile = { name: '', company: '', role: '', phone: '' };
+  profile = {
+    name: '',
+    company: '',
+    role: '',
+    phone: '',
+    projectSize: null as number | null,
+    projectSizeUnit: 'crore',
+    yearsOfExperience: null as number | null,
+  };
+
+  // Country code dropdown
+  countryOptions = COUNTRY_CODES;
+  selectedCountryCode = '+91';
 
   selectedRole = '';
   roleOptions: DropdownOption[] = ROLE_OPTIONS;
@@ -51,8 +64,17 @@ export class ProfileComponent implements OnInit {
     const storedProfile = localStorage.getItem('profile');
     if (storedProfile) {
       const p = JSON.parse(storedProfile);
-      this.profile = { name: p.name || '', company: p.company || '', role: p.role || '', phone: p.phone || '' };
+      this.profile = {
+        name: p.name || '',
+        company: p.company || '',
+        role: p.role || '',
+        phone: p.phone || '',
+        projectSize: p.projectSize ?? null,
+        projectSizeUnit: p.projectSizeUnit || 'crore',
+        yearsOfExperience: p.yearsOfExperience ?? null,
+      };
       this.selectedRole = p.role || '';
+      if (p.countryCode) this.selectedCountryCode = p.countryCode;
     }
 
     const storedDraft = localStorage.getItem('signupDraft');
@@ -62,14 +84,18 @@ export class ProfileComponent implements OnInit {
       if (!this.profile.name) this.profile.name = d.fullName || '';
     }
 
-    const storedCareer = localStorage.getItem('profileCareer');
-    if (storedCareer) {
-      const c = JSON.parse(storedCareer);
-      this.selectedSub1 = c.selectedSub1 || [];
-      this.selections = c.selections || {};
-      this.photos = c.photos || {};
-      this.activeSub1 = c.activeSub1 || null;
-      this.activeSub2 = c.activeSub2 || null;
+    // Only restore career state if user explicitly saved before (not draft auto-persist)
+    const savedProfile = localStorage.getItem('profileSaved');
+    if (savedProfile === 'true') {
+      const storedCareer = localStorage.getItem('profileCareer');
+      if (storedCareer) {
+        const c = JSON.parse(storedCareer);
+        this.selectedSub1 = c.selectedSub1 || [];
+        this.selections = c.selections || {};
+        this.photos = c.photos || {};
+        this.activeSub1 = c.activeSub1 || null;
+        this.activeSub2 = c.activeSub2 || null;
+      }
     }
 
     if (!this.selectedRole) this.selectedRole = '';
@@ -233,11 +259,20 @@ export class ProfileComponent implements OnInit {
     this.saving = true;
     this.error = '';
     this.profile.role = ROLE_LABELS[this.selectedRole] || this.selectedRole;
-    localStorage.setItem('profile', JSON.stringify(this.profile));
+    // Store country code alongside profile
+    localStorage.setItem('profileSaved', 'true');
+    localStorage.setItem('profile', JSON.stringify({
+      ...this.profile,
+      countryCode: this.selectedCountryCode,
+    }));
     this.persist();
 
     if (this.userId) {
-      const payload = { yearsOfExperience: null, projectSize: null, projectSizeUnit: null };
+      const payload = {
+        yearsOfExperience: this.profile.yearsOfExperience,
+        projectSize: this.profile.projectSize,
+        projectSizeUnit: this.profile.projectSizeUnit,
+      };
       this.http.put(`${this.apiBase}/profile/${this.userId}`, payload).subscribe({
         next: () => { this.saving = false; this.router.navigate(['/home']); },
         error: () => { this.saving = false; this.router.navigate(['/home']); }
