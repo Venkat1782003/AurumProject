@@ -8,6 +8,14 @@ export const ROLE_LABELS: Record<string, string> = {
   VENDORS:              'Vendors',
   OTHERS:               'Others',
 };
+
+export const ROLE_OPTIONS: DropdownOption[] = [
+  { value: 'CUSTOMER', label: 'Customer' },
+  { value: 'CONSULTANTS', label: 'Consultants' },
+  { value: 'BUILDERS_CONTRACTORS', label: 'Builders / Contractors' },
+  { value: 'VENDORS', label: 'Vendors' },
+  { value: 'OTHERS', label: 'Others' },
+];
  
 export const PROJECT_TYPE_LABELS: Record<string, string> = {
   RESIDENTIAL:    'Residential',

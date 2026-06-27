@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DropdownOption } from '../../../../core/models/category.interfaces';
-import { ROLE_LABELS, SUB1_BY_ROLE, SUB2_BY_SUB1, SUB3_OPTIONS, PROJECT_TYPE_LABELS } from '../../../../core/constants/category.constants';
+import { ROLE_LABELS, SUB1_BY_ROLE, SUB2_BY_SUB1, SUB3_OPTIONS, PROJECT_TYPE_LABELS, ROLE_OPTIONS } from '../../../../core/constants/category.constants';
 
 @Component({
   selector: 'app-profile',
@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
 
   selectedRole = '';
   roleLabel = '';
+  roleOptions: DropdownOption[] = [];
   categoryOptions: DropdownOption[] = [];
   selectedSub1: string[] = [];
   activeSub1: string | null = null;
@@ -71,6 +72,7 @@ export class ProfileComponent implements OnInit {
     if (!this.selectedRole) {
       this.selectedRole = 'CONSULTANTS';
     }
+    this.roleOptions = ROLE_OPTIONS;
     this.loadCategoryOptions();
     if (!this.activeSub1 && this.selectedSub1.length) {
       this.activeSub1 = this.selectedSub1[0];
@@ -93,10 +95,23 @@ export class ProfileComponent implements OnInit {
     if (this.selectedRole && SUB1_BY_ROLE[this.selectedRole]) {
       this.categoryOptions = SUB1_BY_ROLE[this.selectedRole];
       this.roleLabel = ROLE_LABELS[this.selectedRole] || this.selectedRole;
+      this.profile.role = this.roleLabel;
     } else {
       this.categoryOptions = [];
       this.roleLabel = '';
+      this.profile.role = '';
     }
+  }
+
+  changeRole(role: string): void {
+    this.selectedRole = role;
+    this.activeSub1 = null;
+    this.activeSub2 = null;
+    this.selectedSub1 = [];
+    this.categorySelections = {};
+    this.uiStage = 'sub1';
+    this.loadCategoryOptions();
+    this.persistCareerState();
   }
 
   get availableSub1Options(): DropdownOption[] {
